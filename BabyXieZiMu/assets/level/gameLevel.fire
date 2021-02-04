@@ -180,7 +180,7 @@
       "array": [
         0,
         0,
-        353.338364744051,
+        354.20439014783545,
         0,
         0,
         0,
@@ -6628,8 +6628,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
-      "height": 40
+      "width": 208,
+      "height": 90
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -6640,8 +6640,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -872.094,
-        404.894,
+        -818,
+        430,
         0,
         0,
         0,
@@ -6697,8 +6697,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
-      "height": 40
+      "width": 208,
+      "height": 90
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -6759,8 +6759,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
-      "height": 40
+      "width": 208,
+      "height": 90
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -6811,9 +6811,9 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_string": "重启",
-    "_N$string": "重启",
-    "_fontSize": 20,
+    "_string": "重置关卡",
+    "_N$string": "重置关卡",
+    "_fontSize": 32,
     "_lineHeight": 40,
     "_enableWrapText": false,
     "_N$file": null,
