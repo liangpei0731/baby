@@ -6,14 +6,10 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 const {ccclass, property} = cc._decorator;
+import userData from "../userData";
 
 @ccclass
 export default class miaoMo extends cc.Component {
-
-    //map
-    @property(cc.Prefab)
-    mapPrefab: cc.Prefab = null;
-
     //描摹的图层
     @property(cc.Graphics)
     miaoMoGraphics: cc.Graphics = null;
@@ -27,12 +23,23 @@ export default class miaoMo extends cc.Component {
     // onLoad () {}
 
     start () {
-        var node = cc.instantiate(this.mapPrefab);
-        this.node.addChild(node);
+        //加载地图
+        cc.log("加载地图：map"+userData.currentGameLevel);
+        var self = this;
+        cc.resources.load("map2",cc.Prefab,function(error:Error,assets:cc.Prefab)
+        {
+            if(!assets)
+            {
+                cc.log("加载地图失败!");
+                return;
+            }
+            var node:cc.Node = cc.instantiate(assets);
+            self.node.addChild(node);
 
-        var map = node.getComponentInChildren("map");
-        map.setMiaoMoGraphics(this.miaoMoGraphics);
-        map.setUserMiaoMoGraphics(this.userMiaoMoGraphics);
+            var map = node.getComponentInChildren("map");
+            map.setMiaoMoGraphics(self.miaoMoGraphics);
+            map.setUserMiaoMoGraphics(self.userMiaoMoGraphics);
+        });
     }
 
     // update (dt) {}

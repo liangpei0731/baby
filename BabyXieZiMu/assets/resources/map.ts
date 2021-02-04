@@ -24,9 +24,9 @@ export default class map extends cc.Component {
     pathsIndex: number = 0;
     //当前动画坐标索引
     pathsPositionIndex: number = 0;
-    
+    //是否正在手绘
     touchBegin: boolean = false;
-    
+
     // LIFE-CYCLE CALLBACKS:
 
     // onLoad () {}
@@ -66,7 +66,7 @@ export default class map extends cc.Component {
             if(this.pathsIndex + 1 < clips.length)
             {
                 this.pathsIndex++;
-                animation.node.runAction(cc.sequence(cc.delayTime(0.2),cc.callFunc(function(){
+                animation.node.runAction(cc.sequence(cc.delayTime(0.5),cc.callFunc(function(){
                     animation.play(clips[this.pathsIndex].name);
                 },this)));
             }else{

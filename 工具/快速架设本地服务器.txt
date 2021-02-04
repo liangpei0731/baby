@@ -1,0 +1,5 @@
+下载python 2.7.18
+cd 你想要的目录
+python --version
+python -m SimpleHTTPServer 8000
+进行访问：http://localhost:8000/
