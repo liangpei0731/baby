@@ -145,17 +145,17 @@ export default class map extends cc.Component {
 
         this.arrow.node.on(cc.Node.EventType.TOUCH_MOVE, (event) => 
         {
-            if (!this.touchBegin) return true;
-            if(this.paths.length < 0) return true; 
-            if(this.paths[this.pathsIndex].length < 0) return true;
-            if(this.paths[this.pathsIndex].length <= this.pathsPositionIndex + 1) return true;
+            if (!this.touchBegin) return false;
+            if(this.paths.length < 0) return false; 
+            if(this.paths[this.pathsIndex].length < 0) return false;
+            if(this.paths[this.pathsIndex].length <= this.pathsPositionIndex + 1) return false;
             
             var touchPos = this.arrow.node.parent.convertToNodeSpaceAR(event.touch.getLocation());
             var position = this.paths[this.pathsIndex][this.pathsPositionIndex+1];
             
             //超出临摹范围
             var distance = position.sub(touchPos).mag();
-            if(distance > 30) return true;
+            if(distance > 100) return false;
             
             this.pathsPositionIndex++;
             var originalPos = this.arrow.node.getPosition();
