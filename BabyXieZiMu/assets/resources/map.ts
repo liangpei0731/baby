@@ -14,6 +14,10 @@ export default class map extends cc.Component {
     @property(cc.Button)
     arrow: cc.Button = null;
 
+    //灵敏度
+    @property
+    sensitivity: number = 20;
+
     //多段路径点
     paths: Array<Array<any>> =  [];
     tempPath:cc.Vec2[] = [];
@@ -161,7 +165,7 @@ export default class map extends cc.Component {
             
                 //超出临摹范围
                 var distance = position.sub(touchPos).mag();
-                if(distance > 30) break;
+                if(distance > this.sensitivity) break;
                 
                 var originalPos = this.arrow.node.getPosition();
                 this.arrow.node.position = position;
