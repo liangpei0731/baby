@@ -22,7 +22,8 @@ export default class miaoMo extends cc.Component {
 
     // onLoad () {}
 
-    start () {
+    start () 
+    {
         //加载地图
         cc.log("加载地图：map"+userData.currentGameLevel);
         var self = this;

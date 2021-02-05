@@ -565,7 +565,7 @@
         "__uuid__": "a153945d-2511-4c14-be7b-05d242f47d57"
       }
     ],
-    "_lineWidth": 65,
+    "_lineWidth": 60,
     "_strokeColor": {
       "__type__": "cc.Color",
       "r": 19,

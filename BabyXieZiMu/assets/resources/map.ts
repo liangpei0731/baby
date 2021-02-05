@@ -91,17 +91,21 @@ export default class map extends cc.Component {
         if(this.currentState == 1)
         {
             //获取自动绘制路径以及保存路径上的所有坐标点
-            var position: cc.Vec2 = this.arrow.node.getPosition();
-            if(this.pathsPositionIndex == 0)
-            {
-                this.miaoMoGraphics.moveTo(position.x,position.y);
-            }
+            var position: cc.Vec2 = this.arrow.node.getPosition()
             if(this.pathsPositionIndex == 0 || this.tempPath[this.pathsPositionIndex-1] != position)
             {
+                if(this.pathsPositionIndex == 0)
+                {
+                    this.miaoMoGraphics.moveTo(position.x,position.y);
+                }else{
+                    var prePosition = this.tempPath[this.pathsPositionIndex-1];
+                    this.miaoMoGraphics.moveTo(prePosition.x,prePosition.y);
+                }
                 //过滤重复坐标点
                 this.tempPath[this.pathsPositionIndex++] = position;
                 this.miaoMoGraphics.lineTo(position.x,position.y);
                 this.miaoMoGraphics.stroke();
+                this.miaoMoGraphics.fill();
             }
         }
     }
@@ -125,8 +129,6 @@ export default class map extends cc.Component {
         
         this.arrow.node.position = position;
         this.arrow.node.rotation = theta;
-
-        this.userMiaoMoGraphics.moveTo(position.x,position.y);
     }
 
     initUserDraw()
@@ -157,7 +159,6 @@ export default class map extends cc.Component {
             var distance = position.sub(touchPos).mag();
             if(distance > 100) return false;
             
-            this.pathsPositionIndex++;
             var originalPos = this.arrow.node.getPosition();
             this.arrow.node.position = position;
 
@@ -169,9 +170,13 @@ export default class map extends cc.Component {
             this.arrow.node.rotation = theta;
 
             //同步绘画层
+            var prePosition = this.paths[this.pathsIndex][this.pathsPositionIndex];
+            this.userMiaoMoGraphics.moveTo(prePosition.x,prePosition.y);
             this.userMiaoMoGraphics.lineTo(position.x,position.y);
             this.userMiaoMoGraphics.stroke();
+            this.userMiaoMoGraphics.fill();
 
+            this.pathsPositionIndex++;
             cc.log("当前路径点：",this.pathsPositionIndex+1,"/",this.paths[this.pathsIndex].length)
             if(this.paths[this.pathsIndex].length > this.pathsPositionIndex + 1)
             {
