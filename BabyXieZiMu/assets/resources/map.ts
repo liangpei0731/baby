@@ -153,31 +153,37 @@ export default class map extends cc.Component {
             if(this.paths[this.pathsIndex].length <= this.pathsPositionIndex + 1) return false;
             
             var touchPos = this.arrow.node.parent.convertToNodeSpaceAR(event.touch.getLocation());
-            var position = this.paths[this.pathsIndex][this.pathsPositionIndex+1];
+            while(true)
+            {
+                if(this.paths[this.pathsIndex].length <= this.pathsPositionIndex + 1) break;
+                
+                var position = this.paths[this.pathsIndex][this.pathsPositionIndex+1];
             
-            //超出临摹范围
-            var distance = position.sub(touchPos).mag();
-            if(distance > 100) return false;
+                //超出临摹范围
+                var distance = position.sub(touchPos).mag();
+                if(distance > 30) break;
+                
+                var originalPos = this.arrow.node.getPosition();
+                this.arrow.node.position = position;
+    
+                //旋转角度
+                var p1 = position;
+                var p2 = originalPos;
+                var  angle: number  = Math.atan2((p2.y-p1.y), (p1.x-p2.x));
+                var  theta: number  = angle*( 180 /Math.PI);
+                this.arrow.node.rotation = theta;
+    
+                //同步绘画层
+                var prePosition = this.paths[this.pathsIndex][this.pathsPositionIndex];
+                this.userMiaoMoGraphics.moveTo(prePosition.x,prePosition.y);
+                this.userMiaoMoGraphics.lineTo(position.x,position.y);
+                this.userMiaoMoGraphics.stroke();
+                this.userMiaoMoGraphics.fill();
+    
+                this.pathsPositionIndex++;
+                cc.log("当前路径点：",this.pathsPositionIndex+1,"/",this.paths[this.pathsIndex].length)
+            }
             
-            var originalPos = this.arrow.node.getPosition();
-            this.arrow.node.position = position;
-
-            //旋转角度
-            var p1 = position;
-            var p2 = originalPos;
-            var  angle: number  = Math.atan2((p2.y-p1.y), (p1.x-p2.x));
-            var  theta: number  = angle*( 180 /Math.PI);
-            this.arrow.node.rotation = theta;
-
-            //同步绘画层
-            var prePosition = this.paths[this.pathsIndex][this.pathsPositionIndex];
-            this.userMiaoMoGraphics.moveTo(prePosition.x,prePosition.y);
-            this.userMiaoMoGraphics.lineTo(position.x,position.y);
-            this.userMiaoMoGraphics.stroke();
-            this.userMiaoMoGraphics.fill();
-
-            this.pathsPositionIndex++;
-            cc.log("当前路径点：",this.pathsPositionIndex+1,"/",this.paths[this.pathsIndex].length)
             if(this.paths[this.pathsIndex].length > this.pathsPositionIndex + 1)
             {
                //继续下一个路径点
