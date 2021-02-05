@@ -600,6 +600,7 @@
       "__id__": 13
     },
     "sensitivity": 60,
+    "maxDrawCount": 2,
     "_id": ""
   },
   {

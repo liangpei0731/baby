@@ -30,6 +30,11 @@ export default class map extends cc.Component {
     pathsPositionIndex: number = 0;
     //是否正在手绘
     touchBegin: boolean = false;
+    //最大手绘次数
+    @property
+    maxDrawCount: number = 2;
+    //手绘次数
+    drawCount: number = 0;
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -80,7 +85,10 @@ export default class map extends cc.Component {
                 this.pathsPositionIndex = 0;
 
                 //自动绘制完以后开始初始化玩家绘画层
-                this.initUserDraw();
+                if(this.maxDrawCount > 0)
+                {
+                    this.initUserDraw();
+                } 
             }
         }, this);
         if(this.pathsIndex < clips.length)
@@ -98,15 +106,15 @@ export default class map extends cc.Component {
             var position: cc.Vec2 = this.arrow.node.getPosition()
             if(this.pathsPositionIndex == 0 || this.tempPath[this.pathsPositionIndex-1] != position)
             {
-                if(this.pathsPositionIndex == 0)
+                var prePosition = position;
+                if(this.pathsPositionIndex != 0)
                 {
-                    this.miaoMoGraphics.moveTo(position.x,position.y);
-                }else{
-                    var prePosition = this.tempPath[this.pathsPositionIndex-1];
-                    this.miaoMoGraphics.moveTo(prePosition.x,prePosition.y);
+                    prePosition = this.tempPath[this.pathsPositionIndex-1]
                 }
+
                 //过滤重复坐标点
                 this.tempPath[this.pathsPositionIndex++] = position;
+                this.miaoMoGraphics.moveTo(prePosition.x,prePosition.y);
                 this.miaoMoGraphics.lineTo(position.x,position.y);
                 this.miaoMoGraphics.stroke();
                 this.miaoMoGraphics.fill();
@@ -208,11 +216,18 @@ export default class map extends cc.Component {
                 this.node.runAction(cc.sequence(
                     cc.delayTime(0.5)
                     ,cc.callFunc(function(){
-                        this.currentState = 2;
-                        this.pathsIndex = 0;
-                        this.pathsPositionIndex = 0;
-                        this.userMiaoMoGraphics.clear();
-                        this.initArrow();
+                        this.drawCount++;
+                        if(this.drawCount < this.maxDrawCount)
+                        {
+                            //重绘一遍
+                            this.currentState = 2;
+                            this.pathsIndex = 0;
+                            this.pathsPositionIndex = 0;
+                            this.userMiaoMoGraphics.clear();
+                            this.initArrow();
+                        }else{
+                            this.gameOver(true);
+                        }
                     },this)
                 ))
             } 
@@ -221,5 +236,17 @@ export default class map extends cc.Component {
         this.arrow.node.on(cc.Node.EventType.TOUCH_END, (event) => {
             this.touchBegin = false
         }, this);
+    }
+
+    gameOver(isVictory: boolean)
+    {
+        cc.log("Game Over：",isVictory)
+        var node = cc.find("Canvas")
+        cc.log(node);
+        var componet = node.getComponent(cc.Component);
+        cc.log(componet);
+        var game = componet.getComponent("game");
+        cc.log(game);
+        game.gameOver(isVictory);
     }
 }

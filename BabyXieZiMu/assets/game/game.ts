@@ -10,35 +10,39 @@ const {ccclass, property} = cc._decorator;
 import userData from "../userData";
 
 @ccclass
-export default class babyXieZiMuGame extends cc.Component {
+export default class game extends cc.Component {
 
+    @property(cc.Layout)
+    gameOverNode: cc.Layout = null;
+
+    isVictory: boolean = false;
     // LIFE-CYCLE CALLBACKS:
 
     // onLoad () {}
 
     start () {
-
+        this.gameOverNode.node.active = false;
     }
 
     // update (dt) {}
 
-
     onButtonEventReturn(event, customEventData)
     {
-        this.gameOver(false);
+        cc.director.loadScene("gameLevel");
     }
 
     onButtonEventVictory(event, customEventData)
     {
-        this.gameOver(true);
+        if(this.isVictory) 
+        {
+            userData.unlockGameLevel();
+        }
+        cc.director.loadScene("gameLevel");
     }
 
     gameOver(isVictory: boolean)
     {
-        if(isVictory)
-        {
-            userData.unlockGameLevel()
-        }
-        cc.director.loadScene("gameLevel");
+        this.gameOverNode.node.active = true;
+        this.isVictory = isVictory;
     }
 }
