@@ -110,6 +110,11 @@ export default class map extends cc.Component {
                 this.miaoMoGraphics.lineTo(position.x,position.y);
                 this.miaoMoGraphics.stroke();
                 this.miaoMoGraphics.fill();
+
+                //更新箭头的方向
+                var  angle: number  = Math.atan2((prePosition.y-position.y), (position.x-prePosition.x))
+                var  theta: number  = angle*( 180 /Math.PI);
+                this.arrow.node.rotation = theta;
             }
         }
     }
