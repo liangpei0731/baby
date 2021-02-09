@@ -104,15 +104,14 @@ export default class map extends cc.Component {
         {
             //获取自动绘制路径以及保存路径上的所有坐标点
             var position: cc.Vec2 = this.arrow.node.getPosition()
-            if(this.pathsPositionIndex == 0 || this.tempPath[this.pathsPositionIndex-1] != position)
+            if(this.pathsPositionIndex == 0 || position.sub(this.tempPath[this.pathsPositionIndex-1]).mag() > 0)
             {
+                //过滤重复坐标点和距离太短的坐标点
                 var prePosition = position;
                 if(this.pathsPositionIndex != 0)
                 {
                     prePosition = this.tempPath[this.pathsPositionIndex-1]
                 }
-
-                //过滤重复坐标点
                 this.tempPath[this.pathsPositionIndex++] = position;
                 this.miaoMoGraphics.moveTo(prePosition.x,prePosition.y);
                 this.miaoMoGraphics.lineTo(position.x,position.y);

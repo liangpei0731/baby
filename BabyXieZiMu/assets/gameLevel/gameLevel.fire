@@ -204,7 +204,7 @@
     "_is3DNode": false,
     "_groupIndex": 0,
     "groupIndex": 0,
-    "_id": "cbivWGzhxFnq07Pc+g/UmC"
+    "_id": "18FA22fUBExKevxkOUAc5+"
   },
   {
     "__type__": "cc.AudioSource",
@@ -223,7 +223,7 @@
     "_firstlyEnabled": true,
     "playOnLoad": true,
     "preload": false,
-    "_id": "35f4TOQeJLD6eSmjLXZm8m"
+    "_id": "8djGeoGCND/Yn3GthWdzaO"
   },
   {
     "__type__": "cc.Node",
@@ -264,7 +264,7 @@
       "array": [
         0,
         0,
-        346.4101615137755,
+        344.6781107062066,
         0,
         0,
         0,

@@ -30,6 +30,14 @@ export default class gameLevel extends cc.Component {
     onLoad () {
         //加载用户数据
         userData.loadUserData(this.maxGameLevel);
+        // if(cc.audioEngine.isMusicPlaying() == false)
+        // {
+        //     cc.log("播放背景音乐!");
+        //     cc.resources.load("bg", cc.AudioClip, null, function (err:Error, clip:cc.AudioClip) {
+        //         var audioID = cc.audioEngine.playMusic(clip, true);
+        //         cc.audioEngine.setMusicVolume(0.6);
+        //     });
+        // }
     }
 
     start () 
