@@ -12,6 +12,9 @@ import userData from "../userData";
 @ccclass
 export default class gameLevel extends cc.Component {
     
+    @property(cc.AudioSource)
+    tipsAudioSource: cc.AudioSource[] = [];
+
     @property(cc.ScrollView)
     levelScrollView: cc.ScrollView = null;
 
@@ -30,6 +33,16 @@ export default class gameLevel extends cc.Component {
     onLoad () {
         //加载用户数据
         userData.loadUserData(this.maxGameLevel);
+
+        //随机提示语
+        var self = this;
+        this.node.runAction(cc.repeatForever(cc.sequence(
+            cc.delayTime(60)
+            ,cc.callFunc(function(){
+                cc.audioEngine.playEffect(this.tipsAudioSource[Math.round(Math.random()*self.tipsAudioSource.length)].clip,false);
+            },this)
+        )))
+        
         // if(cc.audioEngine.isMusicPlaying() == false)
         // {
         //     cc.log("播放背景音乐!");

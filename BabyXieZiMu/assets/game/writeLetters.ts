@@ -8,7 +8,7 @@
 const {ccclass, property} = cc._decorator;
 
 @ccclass
-export default class map extends cc.Component {
+export default class writeLetters extends cc.Component {
     
     //箭头
     @property(cc.Button)
@@ -32,7 +32,7 @@ export default class map extends cc.Component {
     touchBegin: boolean = false;
     //最大手绘次数
     @property
-    maxDrawCount: number = 2;
+    maxDrawCount: number = 0;
     //手绘次数
     drawCount: number = 0;
 
@@ -93,7 +93,6 @@ export default class map extends cc.Component {
         }, this);
         if(this.pathsIndex < clips.length)
         {
-            //this.currentState = 1;
             animation.play(clips[this.pathsIndex].name);
         }
     }
@@ -246,6 +245,6 @@ export default class map extends cc.Component {
         cc.log(componet);
         var game = componet.getComponent("game");
         cc.log(game);
-        game.gameOver(isVictory);
+        game.enterOrLeaveGame();
     }
 }
