@@ -1,0 +1,50 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "map19_1_1",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.8333333333333334,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "props": {
+      "position": [
+        {
+          "frame": 0,
+          "value": [
+            108,
+            97
+          ],
+          "motionPath": [
+            [
+              -98,
+              111,
+              -18,
+              236,
+              -129,
+              -5
+            ],
+            [
+              128,
+              -99,
+              137,
+              -6,
+              -32,
+              -286
+            ]
+          ]
+        },
+        {
+          "frame": 0.8333333333333334,
+          "value": [
+            -123,
+            -78
+          ],
+          "motionPath": []
+        }
+      ]
+    }
+  },
+  "events": []
+}

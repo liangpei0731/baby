@@ -39,7 +39,7 @@ export default class gameLevel extends cc.Component {
         this.node.runAction(cc.repeatForever(cc.sequence(
             cc.delayTime(60)
             ,cc.callFunc(function(){
-                cc.audioEngine.playEffect(this.tipsAudioSource[Math.round(Math.random()*self.tipsAudioSource.length)].clip,false);
+                cc.audioEngine.playEffect(this.tipsAudioSource[Math.floor(Math.random()*self.tipsAudioSource.length)].clip,false);
             },this)
         )))
         

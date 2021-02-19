@@ -32,9 +32,9 @@ export default class puzzleJigsaw extends cc.Component {
     onLoad () {
         //当前游戏关卡
         var gameLevel = userData.currentGameLevel;
-        gameLevel = 2;
+        gameLevel = 1;
         //加载资源
-        var patch: string[] = ["map"+gameLevel+"_3_1","map"+gameLevel+"_3_2","map"+gameLevel+"_3_3","map"+gameLevel+"_3_4"];
+        var patch: string[] = ["pitch/map"+gameLevel+"_1","pitch/map"+gameLevel+"_2","pitch/map"+gameLevel+"_3","pitch/map"+gameLevel+"_4"];
         cc.log(patch);
         var self = this;
         cc.resources.load(patch, cc.SpriteFrame, function(error,assets){
@@ -50,7 +50,8 @@ export default class puzzleJigsaw extends cc.Component {
                 nodeScrollView.name = "patch"+(index+1)
                 var sp = nodeScrollView.addComponent(cc.Sprite);
                 sp.spriteFrame = assets[index];
-                nodeScrollView.parent = self.patchScrollView.content;
+                self.patchScrollView.content.insertChild(nodeScrollView,Math.floor(Math.random()*self.patchScrollView.content.childrenCount));
+                //nodeScrollView.parent = self.patchScrollView.content;
                 //背景碎片
                 var nodeBg = cc.instantiate(nodeScrollView);
                 nodeBg.getComponent(cc.Sprite).setMaterial(0,self.gray);

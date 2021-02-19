@@ -71,7 +71,7 @@ export default class miaoMo extends cc.Component {
         if(this.currentNode) this.currentNode.removeFromParent();
         //当前游戏关卡
         var gameLevel = userData.currentGameLevel;
-        gameLevel = 2;
+        //gameLevel = 2;
         //当前游戏阶段
         ++this.currentStage;
         var currentStage = this.currentStage;

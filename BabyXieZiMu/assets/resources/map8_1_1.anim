@@ -1,0 +1,33 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "map8_1_1",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.4166666666666667,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "props": {
+      "position": [
+        {
+          "frame": 0,
+          "value": [
+            -121.23,
+            151.538,
+            0
+          ]
+        },
+        {
+          "frame": 0.4166666666666667,
+          "value": [
+            -121.23,
+            -164.528,
+            0
+          ]
+        }
+      ]
+    }
+  },
+  "events": []
+}

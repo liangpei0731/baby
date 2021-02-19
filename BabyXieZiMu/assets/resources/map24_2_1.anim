@@ -1,0 +1,33 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "map24_2_1",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.4166666666666667,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "props": {
+      "position": [
+        {
+          "frame": 0,
+          "value": [
+            -82.264,
+            67.11,
+            0
+          ]
+        },
+        {
+          "frame": 0.4166666666666667,
+          "value": [
+            88.758,
+            -168.857,
+            0
+          ]
+        }
+      ]
+    }
+  },
+  "events": []
+}

@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "map2_2",
+    "_name": "map",
     "_objFlags": 0,
     "_parent": null,
     "_children": [
