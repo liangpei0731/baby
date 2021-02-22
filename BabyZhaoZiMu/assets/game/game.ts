@@ -10,14 +10,12 @@ import userData from "../userData";
 
 @ccclass
 export default class game extends cc.Component {
-
-    //游戏结束节点
-    @property(cc.Node)
-    gameOverNode: cc.Node = null;
-
     //游戏节点
     @property(cc.Node)
     gameNode: cc.Node = null;
+
+    @property(cc.AudioSource)
+    effectAudioSource: cc.AudioSource = null;
 
     //字母集
     @property(cc.ScrollView)
@@ -31,19 +29,64 @@ export default class game extends cc.Component {
     @property(cc.Material)
     restore: cc.Material = null;
 
-    //放大镜
-    @property(cc.Camera)
-    magnifier: cc.Camera = null;
+    // //放大镜
+    // @property(cc.Camera)
+    // magnifier: cc.Camera = null;
+    @property(cc.Node)
+    mirror: cc.Node = null;
+    @property(cc.Node)
+    mirrorCameraNode: cc.Node = null;
+    @property(cc.Node)
+    tempCameraSpriteNode: cc.Node = null;
 
+    //报警
+    @property(cc.Node)
+    warning: cc.Node = null;
+    //计时器
+    @property(cc.ProgressBar)
+    countdown: cc.ProgressBar = null;
+    //总时间秒s
+    totalTime: number = 60;
+    //星星数量
+    starCount: number = 3;
+    @property(cc.Sprite)
+    star: cc.Sprite[] = [];
+
+    //提示
+    @property(cc.ScrollView)
+    tipsScrollView: cc.ScrollView = null;
+
+    //游戏结束节点
+    @property(cc.Node)
+    gameOverNode: cc.Node = null;
+    //游戏结束的星星
+    @property(cc.Node)
+    gameOverStar: cc.Node[] = [];
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {}
+    onLoad () {
+        this.gameOverNode.active = false;
+        this.warning.active = false;
+
+        this.initCamera();
+        this.mirrorCameraNode.setPosition(this.mirror.getPosition());
+
+        
+        this.node.on(cc.Node.EventType.TOUCH_START, (event) => {
+            let touchPos: cc.Vec2 = this.mirror.parent.convertToNodeSpaceAR(event.getLocation());
+            this.mirror.setPosition(touchPos);
+            this.mirrorCameraNode.setPosition(touchPos);
+        }, this);
+        this.node.on(cc.Node.EventType.TOUCH_MOVE, (event) => {
+            let touchPos: cc.Vec2 = this.mirror.parent.convertToNodeSpaceAR(event.getLocation());
+            this.mirror.setPosition(touchPos);
+            this.mirrorCameraNode.setPosition(touchPos);
+        }, this);
+
+    }
 
     start () {
-        //初始化
-        this.gameOverNode.active = false;
         var gameLevel = userData.currentGameLevel;
-
         //加载地图
         var self = this;
         cc.resources.load("map"+gameLevel,cc.Prefab,function(error:Error,assets:cc.Prefab)
@@ -55,6 +98,8 @@ export default class game extends cc.Component {
             }
             var map:cc.Node = cc.instantiate(assets);
             self.gameNode.addChild(map);
+            map.x = 0;
+            map.y = 0;
             var lastClickNode = null;
             for(var i = 0; i < map.childrenCount; i++)
             {
@@ -66,18 +111,16 @@ export default class game extends cc.Component {
                 newNode.y = 0;
                 newNode.getComponent(cc.Label).setMaterial(0,self.gray);
 
-                //找到了
+                //是否在放大镜范围内
                 node.on(cc.Node.EventType.TOUCH_START,(event) => {
                     var clickNode: cc.Node = event.target;
-                    cc.log(clickNode);
-                    
-                    //是否在放大镜范围内
-                    var magnifierRect = cc.rect(self.magnifier.node.x, self.magnifier.node.y,self.magnifier.rect.width*map.width,self.magnifier.rect.height*map.height);
-                    var letterPosition = clickNode.position;
+                    var letterPosition = clickNode.parent.convertToWorldSpaceAR(clickNode.position);
                     var letterRect = cc.rect(letterPosition.x - clickNode.width/2, letterPosition.y - clickNode.height/2, clickNode.width,clickNode.height);
-                    cc.log(magnifierRect,letterRect);
+                    var magnifierPosition = self.tempCameraSpriteNode.parent.convertToWorldSpaceAR(self.tempCameraSpriteNode.position);          
+                    var magnifierRect = cc.rect(magnifierPosition.x-self.tempCameraSpriteNode.width/2,magnifierPosition.y-self.tempCameraSpriteNode.height/2,self.tempCameraSpriteNode.width,self.tempCameraSpriteNode.height);
                     if(magnifierRect.intersects(letterRect))
                     {
+                        self.effectAudioSource.play();
                         clickNode.removeFromParent();
                         var targetNode = self.letterScrollView.content.getChildByName(clickNode.name);
                         targetNode.getComponent(cc.Label).setMaterial(0,self.restore);
@@ -89,43 +132,51 @@ export default class game extends cc.Component {
                     }
                 }, self);                
             }
+            //调整字母集间距
             self.letterScrollView.content.getComponent(cc.Layout).spacingX = (self.letterScrollView.content.width - map.childrenCount*map.children[0].width)/(map.childrenCount-1);
-
-            //放大镜效果
-            map.on(cc.Node.EventType.TOUCH_MOVE, (event) => {
-                var touchPosition = event.touch.getLocation();
-                if(cc.rect(map.x-map.width/2,map.y-map.height/2,map.width,map.height).contains(map.parent.convertToNodeSpaceAR(touchPosition)))
-                {
-                    //放大镜位置
-                    self.magnifier.node.position = self.magnifier.node.parent.convertToNodeSpaceAR(touchPosition);
-                    //放大镜效果位置
-                    self.magnifier.rect = cc.rect((touchPosition.x-self.magnifier.rect.width*map.width/2)/map.width,(touchPosition.y-self.magnifier.rect.height*map.height/2)/map.height,self.magnifier.rect.width,self.magnifier.rect.height);
-                }                
-            }, self);
-            map.on(cc.Node.EventType.TOUCH_CANCEL, (event) => {
-                var touchPosition = event.touch.getLocation();
-                if(cc.rect(map.x-map.width/2,map.y-map.height/2,map.width,map.height).contains(map.parent.convertToNodeSpaceAR(touchPosition)))
-                {
-                    //放大镜位置
-                    self.magnifier.node.position = self.magnifier.node.parent.convertToNodeSpaceAR(touchPosition);
-                    //放大镜效果位置
-                    self.magnifier.rect = cc.rect((touchPosition.x-self.magnifier.rect.width*map.width/2)/map.width,(touchPosition.y-self.magnifier.rect.height*map.height/2)/map.height,self.magnifier.rect.width,self.magnifier.rect.height);
-                }                
-            }, self);
-            map.on(cc.Node.EventType.TOUCH_END, (event) => {
-                var touchPosition = event.touch.getLocation();
-                if(cc.rect(map.x-map.width/2,map.y-map.height/2,map.width,map.height).contains(map.parent.convertToNodeSpaceAR(touchPosition)))
-                {
-                    //放大镜位置
-                    self.magnifier.node.position = self.magnifier.node.parent.convertToNodeSpaceAR(touchPosition);
-                    //放大镜效果位置
-                    self.magnifier.rect = cc.rect((touchPosition.x-self.magnifier.rect.width*map.width/2)/map.width,(touchPosition.y-self.magnifier.rect.height*map.height/2)/map.height,self.magnifier.rect.width,self.magnifier.rect.height);
-                }                
-            }, self);
+            
+            //倒计时
+            self.countdown.node.runAction(cc.repeatForever(cc.sequence(
+                cc.delayTime(0.1),
+                cc.callFunc(function(){
+                    self.countdown.progress = (self.countdown.progress*self.totalTime - 0.1)/self.totalTime;
+                    if(self.countdown.progress < 0)
+                    {
+                        self.countdown.progress = 0;
+                    }
+                    if(self.countdown.progress < 0.6)
+                    {
+                        self.starCount = 2;
+                        self.star[0].getComponent(cc.Sprite).setMaterial(0,self.gray);
+                    }
+                    if(self.countdown.progress < 0.3)
+                    {
+                        self.starCount = 1;
+                        self.star[1].getComponent(cc.Sprite).setMaterial(0,self.gray);
+                        if(self.warning.active == false)
+                        {
+                            self.warning.active = true;
+                        }
+                    }
+                },self)
+                ))
         });
     }
 
     // update (dt) {}
+
+    initCamera() {
+        let visibleRect = cc.view.getVisibleSize();
+  
+        let texture = new cc.RenderTexture();
+        texture.initWithSize(visibleRect.width, visibleRect.height);
+        let spriteFrame = new cc.SpriteFrame();
+        spriteFrame.setTexture(texture);
+        this.mirrorCameraNode.getComponent(cc.Camera).targetTexture = texture;
+  
+        this.tempCameraSpriteNode.getComponent(cc.Sprite).spriteFrame = spriteFrame;
+        this.tempCameraSpriteNode.scaleY = -1;
+      }
 
     onButtonEventReturn(event, customEventData)
     {
@@ -136,17 +187,58 @@ export default class game extends cc.Component {
     {
         userData.unlockGameLevel();
         cc.director.loadScene("gameLevel");
+        cc.log("游戏结束.");
     }
 
     onButtonTips(event, customEventData)
     {
-
+        for(var i = 0; i < this.tipsScrollView.content.childrenCount; i++)
+        {
+            var node = this.tipsScrollView.content.children[i].getComponentInChildren(cc.Button);
+            if(node.node.active)
+            {
+                node.node.active = false;
+                this.tipsScrollView.getComponentInChildren(cc.Label).string = (this.tipsScrollView.content.childrenCount - i - 1).toString();
+                var map = this.gameNode.getChildByName("map");
+                if(map.childrenCount > 0)
+                {
+                    var clickNode: cc.Node = map.children[0];   
+                    this.effectAudioSource.play();                 
+                    clickNode.removeFromParent();
+                    var targetNode = this.letterScrollView.content.getChildByName(clickNode.name);
+                    targetNode.getComponent(cc.Label).setMaterial(0,this.restore);
+                    //是否查找完毕
+                    if(map.childrenCount == 0)
+                    {
+                        this.gameOver(true);
+                    }
+                }
+                break;
+            }
+        }
+        
     }
 
     gameOver(isVictory: boolean)
     {
+        this.countdown.node.stopAllActions();
         this.gameOverNode.active = true;
-        cc.log("游戏结束.");
+        this.gameOverNode.getComponent(cc.Button).interactable = false;
+        var node = this.gameOverNode.getChildByName("Find_settlement_2");
+        for(var i = 0; i < 3; i++)
+        {
+            if(i < 3-this.starCount)
+            {
+                this.gameOverStar[i].getComponent(cc.Sprite).setMaterial(0,this.gray);
+            }
+        }
+        var animation = node.getComponent(cc.Animation)
+        animation.playAdditive("gameOver");
+        animation.playAdditive("gameOver2");
+        animation.on("finished",function(){
+            this.gameOverNode.getComponent(cc.Button).interactable = true;
+        },this);
+        this.gameOverNode.getComponent(cc.AudioSource).play();
     }
 
 }

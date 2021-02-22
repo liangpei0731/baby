@@ -15,6 +15,9 @@ export default class gameLevel extends cc.Component {
     @property(cc.AudioSource)
     tipsAudioSource: cc.AudioSource[] = [];
 
+    @property(cc.AudioSource)
+    buttonAudioSource: cc.AudioSource = null;
+
     @property(cc.ScrollView)
     levelScrollView: cc.ScrollView = null;
 
@@ -139,6 +142,7 @@ export default class gameLevel extends cc.Component {
 
     onButtonEventSwitchGameLevel(event,customEventData)
     {
+        this.buttonAudioSource.play();
         this.switchGameLevel(Number(customEventData));
     }
 

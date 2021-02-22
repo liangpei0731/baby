@@ -9,38 +9,32 @@
   "wrapMode": 2,
   "curveData": {
     "props": {
-      "scale": [
+      "position": [
         {
           "frame": 0,
-          "value": {
-            "__type__": "cc.Vec2",
-            "x": 0.6,
-            "y": 0.6
-          }
+          "value": [
+            0,
+            60,
+            0
+          ],
+          "curve": "sineOut"
         },
         {
           "frame": 0.8333333333333334,
-          "value": {
-            "__type__": "cc.Vec2",
-            "x": 0.5,
-            "y": 0.5
-          }
-        },
-        {
-          "frame": 0.9833333333333333,
-          "value": {
-            "__type__": "cc.Vec2",
-            "x": 0.6,
-            "y": 0.6
-          }
+          "value": [
+            0,
+            90,
+            0
+          ],
+          "curve": "sineOut"
         },
         {
           "frame": 1,
-          "value": {
-            "__type__": "cc.Vec2",
-            "x": 0.6,
-            "y": 0.6
-          }
+          "value": [
+            0,
+            60,
+            0
+          ]
         }
       ]
     }
